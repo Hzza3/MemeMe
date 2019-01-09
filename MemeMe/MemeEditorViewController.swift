@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
+class MemeEditorViewController: UIViewController {
 
     @IBOutlet weak var memeImageView: UIImageView!
     
@@ -29,11 +29,18 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 
     var memedImage = UIImage()
     
-    let memeTextAttributes: [String:Any] = [
-        NSAttributedStringKey.strokeColor.rawValue: UIColor.black,
-        NSAttributedStringKey.foregroundColor.rawValue: UIColor.white,
-        NSAttributedStringKey.font.rawValue: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
-        NSAttributedStringKey.strokeWidth.rawValue: 4.0
+//    let memeTextAttributes: [String:Any] = [
+//        NSAttributedStringKey.strokeColor.rawValue: UIColor.black,
+//        NSAttributedStringKey.foregroundColor.rawValue: UIColor.white,
+//        NSAttributedStringKey.font.rawValue: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
+//        NSAttributedStringKey.strokeWidth.rawValue: 4.0
+//    ]
+    
+    let memeTextAttributes: [NSAttributedStringKey : Any] = [
+        NSAttributedStringKey.strokeColor : UIColor.black,
+        NSAttributedStringKey.foregroundColor: UIColor.white,
+        NSAttributedStringKey.font : UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
+        NSAttributedStringKey.strokeWidth : 4.0
     ]
     
     override func viewDidLoad() {
@@ -166,6 +173,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
     }
     
+}
+
+extension MemeEditorViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
@@ -181,6 +192,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         dismiss(animated: true, completion: nil)
     }
     
-    
 }
 
+extension MemeEditorViewController: UITextFieldDelegate {
+    
+}
