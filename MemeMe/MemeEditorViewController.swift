@@ -9,7 +9,7 @@
 import UIKit
 
 class MemeEditorViewController: UIViewController {
-
+    
     @IBOutlet weak var memeImageView: UIImageView!
     
     @IBOutlet weak var navigationBar: UINavigationBar!
@@ -32,7 +32,7 @@ class MemeEditorViewController: UIViewController {
         NSAttributedStringKey.strokeColor.rawValue: UIColor.black,
         NSAttributedStringKey.foregroundColor.rawValue: UIColor.white,
         NSAttributedStringKey.font.rawValue: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
-        NSAttributedStringKey.strokeWidth.rawValue: 4.0
+        NSAttributedStringKey.strokeWidth.rawValue: -4.0
     ]
     
     
@@ -42,14 +42,11 @@ class MemeEditorViewController: UIViewController {
         cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
         shareButton.isEnabled = false
         
-        topTextField.delegate = textFieldDelegate
-        buttomTextField.delegate = textFieldDelegate
-        
         setupTextField(topTextField, text: "TOP")
         setupTextField(buttomTextField, text: "BOTTOM")
         
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         subscribeToKeyboardNotifications()
@@ -60,8 +57,6 @@ class MemeEditorViewController: UIViewController {
         unsubscribeFromKeyboardNotifications()
     }
     
-    
-   
     
     func subscribeToKeyboardNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -82,7 +77,7 @@ class MemeEditorViewController: UIViewController {
     
     @objc func keyboardWillHide(_ notification:Notification) {
         if buttomTextField.isFirstResponder {
-       view.frame.origin.y += getKeyboardHeight(notification)
+            view.frame.origin.y = 0
         }
     }
     
@@ -91,7 +86,7 @@ class MemeEditorViewController: UIViewController {
         let keyboardSize = userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue // of CGRect
         return keyboardSize.cgRectValue.height
     }
-
+    
     @IBAction func cameraButtonTapped(_ sender: Any) {
         presentImagePicker(source: .camera)
     }
@@ -99,10 +94,10 @@ class MemeEditorViewController: UIViewController {
     @IBAction func albumButtonTapped(_ sender: Any) {
         presentImagePicker(source: .photoLibrary)
     }
-  
+    
     func save() {
-        if !(topTextField.text?.isEmpty)! && !(buttomTextField.text?.isEmpty)! && memeImageView.image != nil {
-           let meme = Meme(topText: topTextField.text!, buttomText: buttomTextField.text!, originalImage: memeImageView.image!, memedImage: memedImage)
+        if let topText = topTextField.text, let bottomText = buttomTextField.text, let image = memeImageView.image {
+            let meme = Meme(topText: topText, buttomText: bottomText, originalImage: image, memedImage: memedImage)
         }
     }
     
@@ -182,5 +177,6 @@ extension MemeEditorViewController: UITextFieldDelegate {
         textField.textAlignment = .center
         textField.borderStyle = .none
         textField.text = text
+        textField.delegate = textFieldDelegate
     }
 }
