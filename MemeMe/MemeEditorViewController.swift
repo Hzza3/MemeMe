@@ -24,24 +24,17 @@ class MemeEditorViewController: UIViewController {
     @IBOutlet weak var shareButton: UIBarButtonItem!
     
     let textFieldDelegate = TextFieldDelegate()
-    var selecedoriginalPhoto = UIImage()
     
-
+    var selecedoriginalPhoto = UIImage()
     var memedImage = UIImage()
     
-//    let memeTextAttributes: [String:Any] = [
-//        NSAttributedStringKey.strokeColor.rawValue: UIColor.black,
-//        NSAttributedStringKey.foregroundColor.rawValue: UIColor.white,
-//        NSAttributedStringKey.font.rawValue: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
-//        NSAttributedStringKey.strokeWidth.rawValue: 4.0
-//    ]
-    
-    let memeTextAttributes: [NSAttributedStringKey : Any] = [
-        NSAttributedStringKey.strokeColor : UIColor.black,
-        NSAttributedStringKey.foregroundColor: UIColor.white,
-        NSAttributedStringKey.font : UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
-        NSAttributedStringKey.strokeWidth : 4.0
+    let memeTextAttributes: [String:Any] = [
+        NSAttributedStringKey.strokeColor.rawValue: UIColor.black,
+        NSAttributedStringKey.foregroundColor.rawValue: UIColor.white,
+        NSAttributedStringKey.font.rawValue: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
+        NSAttributedStringKey.strokeWidth.rawValue: 4.0
     ]
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,7 +45,8 @@ class MemeEditorViewController: UIViewController {
         topTextField.delegate = textFieldDelegate
         buttomTextField.delegate = textFieldDelegate
         
-        setupTextFields()
+        setupTextField(topTextField, text: "TOP")
+        setupTextField(buttomTextField, text: "BOTTOM")
         
     }
 
@@ -67,18 +61,7 @@ class MemeEditorViewController: UIViewController {
     }
     
     
-    func setupTextFields() {
-        
-        topTextField.text = "TOP"
-        buttomTextField.text = "BOTTOM"
-        
-        topTextField.defaultTextAttributes = memeTextAttributes
-        topTextField.textAlignment = .center
-        topTextField.borderStyle = .none
-        buttomTextField.defaultTextAttributes = memeTextAttributes
-        buttomTextField.textAlignment = .center
-        buttomTextField.borderStyle = .none
-    }
+   
     
     func subscribeToKeyboardNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -110,21 +93,11 @@ class MemeEditorViewController: UIViewController {
     }
 
     @IBAction func cameraButtonTapped(_ sender: Any) {
-        
-        let imagePickerVC = UIImagePickerController()
-        imagePickerVC.delegate = self
-        imagePickerVC.sourceType = .camera
-        present(imagePickerVC, animated: true, completion: nil)
-        
+        presentImagePicker(source: .camera)
     }
     
     @IBAction func albumButtonTapped(_ sender: Any) {
-        
-        let imagePickerVC = UIImagePickerController()
-        imagePickerVC.delegate = self
-        imagePickerVC.sourceType = .photoLibrary
-        present(imagePickerVC, animated: true, completion: nil)
-        
+        presentImagePicker(source: .photoLibrary)
     }
   
     func save() {
@@ -192,8 +165,22 @@ extension MemeEditorViewController: UIImagePickerControllerDelegate, UINavigatio
         dismiss(animated: true, completion: nil)
     }
     
+    func presentImagePicker(source: UIImagePickerController.SourceType) {
+        let imagePickerVC = UIImagePickerController()
+        imagePickerVC.delegate = self
+        imagePickerVC.sourceType = source
+        present(imagePickerVC, animated: true, completion: nil)
+    }
+    
 }
 
 extension MemeEditorViewController: UITextFieldDelegate {
     
+    func setupTextField(_ textField: UITextField, text: String) {
+        
+        textField.defaultTextAttributes = memeTextAttributes
+        textField.textAlignment = .center
+        textField.borderStyle = .none
+        textField.text = text
+    }
 }
