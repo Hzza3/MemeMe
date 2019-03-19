@@ -6,12 +6,11 @@
 //  Copyright © 2019 AhmedHazzaa. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 struct Meme {
-    var topText : String
-    var buttomText: String
-    var originalImage: UIImage
-    var memedImage: UIImage
+    let topText : String
+    let buttomText: String
+    let originalImage: UIImage
+    let memedImage: UIImage
 }

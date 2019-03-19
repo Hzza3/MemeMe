@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MemeEditorViewController.swift
 //  MemeMe
 //
 //  Created by Epic Systems on 12/30/18.
@@ -87,6 +87,11 @@ class MemeEditorViewController: UIViewController {
         return keyboardSize.cgRectValue.height
     }
     
+    func updateBarsStatus() {
+        navigationBar.isHidden = !navigationBar.isHidden
+        buttomToolBar.isHidden = !buttomToolBar.isHidden
+    }
+    
     @IBAction func cameraButtonTapped(_ sender: Any) {
         presentImagePicker(source: .camera)
     }
@@ -98,21 +103,20 @@ class MemeEditorViewController: UIViewController {
     func save() {
         if let topText = topTextField.text, let bottomText = buttomTextField.text, let image = memeImageView.image {
             let meme = Meme(topText: topText, buttomText: bottomText, originalImage: image, memedImage: memedImage)
+            SavedMemes.shared.memes.append(meme)
         }
     }
     
     func generateMeme() -> UIImage {
         
-        navigationBar.isHidden = true
-        buttomToolBar.isHidden = true
+        updateBarsStatus()
         
         UIGraphicsBeginImageContext(self.view.frame.size)
         view.drawHierarchy(in: self.view.frame, afterScreenUpdates: true)
         let meme: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         
-        navigationBar.isHidden = false
-        buttomToolBar.isHidden = false
+        updateBarsStatus()
         
         return meme
     }
@@ -134,10 +138,7 @@ class MemeEditorViewController: UIViewController {
     
     @IBAction func cancelButtonTapped(_ sender: Any) {
         
-        selecedoriginalPhoto = UIImage()
-        memeImageView.image = selecedoriginalPhoto
-        topTextField.text = "TOP"
-        buttomTextField.text = "BOTTOM"
+        dismiss(animated: true, completion: nil)
         
     }
     
